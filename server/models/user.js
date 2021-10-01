@@ -25,6 +25,10 @@ userSchema.virtual('password')
      })
 
 userSchema.methods = {
+
+    authenticate: function (plaintext){ 
+        return this.encryptPassword(plaintext) === this.hashedPassword;
+     },
     encryptPassword: function(password) {
         if(!password) return  '';
 
@@ -38,3 +42,6 @@ userSchema.methods = {
         return Math.round(new Date().valueOf() * Math.random()) + '';
     }
 };
+
+
+module.exports = mongoose.model('User',userSchema);
