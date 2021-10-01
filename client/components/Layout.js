@@ -15,7 +15,7 @@ const Layout = ({children}) =>{
             <link rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
                 integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" 
-                    crossorigin="anonymous" />
+                    crossOrigin="anonymous" />
 
             <link rel="stylesheet" href="/static/css/style.css" />
         </React.Fragment>
@@ -23,12 +23,12 @@ const Layout = ({children}) =>{
     const nav = ()=>(
         <ul className="nav nav-tabs bg-dark">
             <li className="nav-item">
-                <Link href=" / ">
+                <Link href="/">
                         <a className="nav-link text-light">Home</a>
                 </Link>
             </li>
             <li className="nav-item">
-                <Link href=" /login ">
+                <Link href="/login ">
                         <a className="nav-link text-light">LoginPage</a>
                 </Link>
             </li>
