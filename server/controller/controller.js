@@ -1,3 +1,4 @@
+const User = require('../models/user')
 const AWS = require('aws-sdk');
 AWS.config.update({
     region:'us-west-2',
@@ -7,7 +8,7 @@ AWS.config.update({
 });
 const ses=  new AWS.SES({apiVersion:'2010-12-01'});
 exports.register = (req, res) => {
-    const {user,email,password} = req.body;
+    const {name,email,password} = req.body;
     const params = {
         Source:process.env.EMAIL_FROM,
         Destination:{
@@ -18,7 +19,7 @@ exports.register = (req, res) => {
             Body:{
                 Html:{
                     Charset:'UTF-8',
-                    Data:`<html><body> <h1>Hello ${user}</h1></body></html>`
+                    Data:`<html><body> <h1>Hello ${name}</h1></body></html>`
                 }
             },
             Subject:{
@@ -29,9 +30,9 @@ exports.register = (req, res) => {
     }
 
 
-    const sendEmailOnRegister = ()=> ses.sendEmail(params).promise()
+    const sendEmailOnRegister = ses.sendEmail(params).promise()
 
-    sendEmailOnRegister().then(data =>{
+    sendEmailOnRegister.then(data =>{
         console.log(data)
     }).catch(err => {
         console.log(err);
