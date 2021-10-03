@@ -5,7 +5,6 @@ exports.userRegisterValidation = [
             .isEmpty()      
                 .withMessage('Name is required'),
     check('email')
-        .not()
             .isEmail()      
                 .withMessage('Must be a valid email address'),
     check('password')
