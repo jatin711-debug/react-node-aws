@@ -1,5 +1,6 @@
 import Layout from "../components/Layout"
 import { useState } from "react"
+import axios from "axios"
 
 const RegisterPage = () => {
 
@@ -13,7 +14,7 @@ const RegisterPage = () => {
     })
 
 
-    const {name,email,password,error,success,buttonText} = state
+    const {name,email,password,error,success,buttonText} = state;
 
     const handelChange = (name) => (e) =>{
         setState({...state,[name]:e.target.value,error:'',success:'',buttonText:'Register'})
@@ -22,7 +23,9 @@ const RegisterPage = () => {
     const handelSubmit = (e) =>{
         e.preventDefault()
 
-        console.table({name , email, password })
+        axios.post('http://localhost:8000/api/register',{
+            name,email,password
+        }).then(res => console.log(res)).catch(error => console.log(error));
     }
 
     const registerForm = ()=> (

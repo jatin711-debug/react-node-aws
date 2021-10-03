@@ -1,5 +1,3 @@
 exports.register = (req, res) => {
-        res.json({
-            data: " YoOPppdcau Hit Register Button"
-        });
+        console.log('Register controller', req.body)
     };

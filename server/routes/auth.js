@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 
-const {register} = require('../controller/controller')
+const {register} = require('../controller/controller.js')
 
-router.get('/register',register )
+router.use('/register',register )
 
 
 module.exports = router;
