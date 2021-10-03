@@ -9,6 +9,12 @@ AWS.config.update({
 const ses=  new AWS.SES({apiVersion:'2010-12-01'});
 exports.register = (req, res) => {
     const {name,email,password} = req.body;
+
+    User.findOne({email:email}).exec(function (err, user) {
+        if(user) {
+            return res.status(422).json({error:'Email Already Exist'});
+        }
+    })
     const params = {
         Source:process.env.EMAIL_FROM,
         Destination:{
