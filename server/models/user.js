@@ -9,20 +9,19 @@ const userSchema = new mongoose.Schema({
     salt:String,
     role:{type: String,default:'Subscriber'},
     reserPassworkLink:{
-        data:String,default:' '
+        data:String,default:''
     }
 },{timestamps:true})
 
 userSchema.virtual('password')
     .set(function(password) {
         this._password = password
-
         this.salt = this.makeSalt();
         this.hashedPassword = this.encryptPassword(password);
     })
     .get(function () { 
         return this.password;
-     })
+    })
 
 userSchema.methods = {
 
