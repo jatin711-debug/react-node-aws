@@ -1,18 +1,18 @@
 import Layout from "../components/Layout"
 import { useState } from "react"
 import axios from "axios"
+import {showSuccessMessage,showErrorMessage} from '../helpers/alert'
 
 const RegisterPage = () => {
 
     const [state,setState] = useState({
-        name: "",
-        email: "",
-        password: "",
+        name: "jatin",
+        email: "jatinmahajan712@gmail.com",
+        password: "1234567",
         error: "",
         success: "",
         buttonText: "Register",
     })
-
 
     const {name,email,password,error,success,buttonText} = state;
 
@@ -20,12 +20,16 @@ const RegisterPage = () => {
         setState({...state,[name]:e.target.value,error:'',success:'',buttonText:'Register'})
     }
 
-    const handelSubmit = (e) =>{
-        e.preventDefault()
+    const handelSubmit = async e =>{
+        e.preventDefault();
+        setState({...state,buttonText:'...Registering...'});
 
-        axios.post('http://localhost:8000/api/register',{
-            name,email,password
-        }).then(res => console.log(res)).catch(error => console.log(error));
+        try {
+            const response = await axios.post('http://localhost:8000/api/register',{name,email,password});
+            setState({...state,name:'',email:'',password:'',buttonText:'Submitted',success:response.data.message})
+        } catch (error) {
+            setState({...state,buttonText:'Register',error:error.response.data.error});
+        }
     }
 
     const registerForm = ()=> (
@@ -49,6 +53,8 @@ const RegisterPage = () => {
         <div className="col-md-6 offset-md-3">
             <h1>REGISTER</h1>
             <br />
+            {success && showSuccessMessage(success)}
+            {error && showErrorMessage(error)}
             {registerForm()}
             <hr />
             {JSON.stringify(state)}
@@ -56,5 +62,4 @@ const RegisterPage = () => {
 
     </Layout>
 }
-
 export default RegisterPage;

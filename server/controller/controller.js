@@ -13,7 +13,6 @@ AWS.config.update({
 
 const ses = new AWS.SES({apiVersion:'2010-12-01'});
 exports.register = (req, res) => {
-    
     const {name,email,password} = req.body;
     User.findOne({email:email}).exec(function (err, user) {
         if(user) {
@@ -27,7 +26,7 @@ exports.register = (req, res) => {
             res.json({message:`Email Has Been Sent To ${email}`});
         }).catch(err => {
             console.log(err);
-            res.json('We Could not send email, Error Occured');
+            res.json({message:'We Could not send email, Error Occured'});
         });
     });
 };
