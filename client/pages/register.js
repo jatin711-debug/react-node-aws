@@ -2,6 +2,7 @@ import Layout from "../components/Layout"
 import { useState } from "react"
 import axios from "axios"
 import {showSuccessMessage,showErrorMessage} from '../helpers/alert'
+import {API} from '../config'
 
 const RegisterPage = () => {
 
@@ -25,7 +26,7 @@ const RegisterPage = () => {
         setState({...state,buttonText:'...Registering...'});
 
         try {
-            const response = await axios.post('http://localhost:8000/api/register',{name,email,password});
+            const response = await axios.post(`${API}/register`,{name,email,password});
             setState({...state,name:'',email:'',password:'',buttonText:'Submitted',success:response.data.message})
         } catch (error) {
             setState({...state,buttonText:'Register',error:error.response.data.error});
@@ -35,13 +36,13 @@ const RegisterPage = () => {
     const registerForm = ()=> (
         <form onSubmit={handelSubmit}>
             <div className="form-group">
-                <input onChange={ handelChange('name') } type="text" className="form-control" value={name} placeholder="Name:" />
+                <input onChange={ handelChange('name') } type="text" className="form-control" value={name} placeholder="Name:" required />
             </div>
             <div className="form-group">
-                <input onChange={ handelChange('email') } type="email" className="form-control" value={email} placeholder="Email:" />
+                <input onChange={ handelChange('email') } type="email" className="form-control" value={email} placeholder="Email:" required />
             </div>
             <div className="form-group">
-                <input onChange={ handelChange('password') } type="password" className="form-control" value={password} placeholder="Password:" />
+                <input onChange={ handelChange('password') } type="password" className="form-control" value={password} placeholder="Password:" required />
             </div>
             <div className="form-group">
                 <button type="submit" className="btn btn-outline-warning">{buttonText}</button>
@@ -56,8 +57,7 @@ const RegisterPage = () => {
             {success && showSuccessMessage(success)}
             {error && showErrorMessage(error)}
             {registerForm()}
-            <hr />
-            {JSON.stringify(state)}
+            <hr />3
         </div>
 
     </Layout>
