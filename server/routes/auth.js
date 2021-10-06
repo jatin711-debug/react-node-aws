@@ -4,9 +4,10 @@ const {userRegisterValidation} = require('../validators/auth');
 const {runValidation} = require('../validators/index');
 
 
-const {register} = require('../controller/controller.js')
+const {register , registerActivate} = require('../controller/controller.js')
 
-router.use('/register', userRegisterValidation, runValidation ,register );
+router.post('/register', userRegisterValidation, runValidation ,register );
+router.post('/register/activate', registerActivate);
 
 
 module.exports = router;

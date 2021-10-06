@@ -1,6 +1,7 @@
 const {registerEmailParams} = require('../helpers/email');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+const shortId = require('shortId');
 
 const AWS = require('aws-sdk');
 
@@ -20,7 +21,7 @@ exports.register = (req, res) => {
         }
         const token = jwt.sign({name,email,password},process.env.JWT_ACCOUNT_ACTIVATION,{expiresIn:'10m'});
         const params = registerEmailParams(email,token);
-        const sendEmailOnRegister = ses.sendEmail(params).promise()
+        const sendEmailOnRegister = ses.sendEmail(params).promise();
         sendEmailOnRegister.then(data =>{
             console.log('Email SUbmitted TO SES'+data);
             res.json({message:`Email Has Been Sent To ${email}`});
@@ -30,3 +31,21 @@ exports.register = (req, res) => {
         });
     });
 };
+
+
+exports.registerActivate = (req, res) => {
+    const {token} = req.body;
+    jwt.verify(token,process.env.JWT_ACCOUNT_ACTIVATION, (err, result) => {
+        if(err) return res.status(401).json({
+            error:"Error"
+        });
+
+        const {name,email,password} = jwt.decode(token);
+        const username = shortId.generate();
+        User.findOne({email}).exec((err, user) => {
+            if(user){
+                return res.status(401).json({error:"Email is Taken"});
+            }
+        });
+    });
+}
