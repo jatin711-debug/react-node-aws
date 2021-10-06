@@ -5,10 +5,8 @@ import {showSuccessMessage , showErrorMessage } from '../../../helpers/alert';
 import {API} from '../../../config';
 import {withRouter} from 'next/router';
 import Layout from '../../../components/Layout';
-import { set } from 'nprogress';
 
 const ActivateAccount = ({router})=>{
-
     const [state,setState] = useState({
         name:'',
         token: '',

@@ -32,20 +32,30 @@ exports.register = (req, res) => {
     });
 };
 
-
 exports.registerActivate = (req, res) => {
-    const {token} = req.body;
-    jwt.verify(token,process.env.JWT_ACCOUNT_ACTIVATION, (err, result) => {
-        if(err) return res.status(401).json({
-            error:"Error"
-        });
-
+        const {token} = req.body;
+        jwt.verify(token,process.env.JWT_ACCOUNT_ACTIVATION, (err, result) => {
+            if(err) {
+                return res.status(401).json({
+                error:"Expired Link Try Again"
+                    });
+                }
         const {name,email,password} = jwt.decode(token);
         const username = shortId.generate();
         User.findOne({email}).exec((err, user) => {
             if(user){
                 return res.status(401).json({error:"Email is Taken"});
             }
+            const newUser = new User({username,name,email,password});
+            newUser.save(function(err, user){
+                if(err){
+                    return res.status(401).json({error:"Error Saving User in Database, Try Again"});
+                }
+                return res.json({message:"Registeration Success, Please Login"});
+            });
         });
     });
 }
+
+
+
