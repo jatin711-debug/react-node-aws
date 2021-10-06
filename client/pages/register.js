@@ -57,7 +57,7 @@ const RegisterPage = () => {
             {success && showSuccessMessage(success)}
             {error && showErrorMessage(error)}
             {registerForm()}
-            <hr />3
+            <hr />
         </div>
 
     </Layout>
