@@ -1,11 +1,12 @@
-import Layout from "../components/Layout"
-import { useState } from "react"
-import axios from "axios"
-import {showSuccessMessage,showErrorMessage} from '../helpers/alert'
-import {API} from '../config'
+import Layout from "../components/Layout";
+import Router from 'next/router';
+import { useState , useEffect } from "react";
+import {isAuth} from '../helpers/auth';
+import axios from "axios";
+import {showSuccessMessage,showErrorMessage} from '../helpers/alert';
+import {API} from '../config';
 
 const RegisterPage = () => {
-
     const [state,setState] = useState({
         name: "jatin",
         email: "jatinmahajan712@gmail.com",
@@ -14,6 +15,10 @@ const RegisterPage = () => {
         success: "",
         buttonText: "Register",
     })
+
+    useEffect(()=>{
+        isAuth() && Router.push('/')
+    },[])
 
     const {name,email,password,error,success,buttonText} = state;
 
