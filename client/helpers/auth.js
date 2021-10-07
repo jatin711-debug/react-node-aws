@@ -41,12 +41,10 @@ export const authenticate = (response,next) =>{
 
 export const isAuth = () =>{
     if(process.browser){
-        console.log("Inside Auth")
         const cookieChecked = getCookie("token");
         if(cookieChecked){
             console.log("Cookie Check");
             if(localStorage.getItem("user")){
-                console.log(JSON.stringify(localStorage.getItem("user")));
                 return JSON.parse(localStorage.getItem("user"));
             }else{
                 return false;
