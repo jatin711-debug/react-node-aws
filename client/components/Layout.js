@@ -37,7 +37,7 @@ const Layout = ({children}) =>{
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link href="/register">
+                            <Link href="/user">
                                     <a className="nav-link text-light">RegisterPage</a>
                             </Link>
                         </li>
@@ -54,10 +54,16 @@ const Layout = ({children}) =>{
                 )
             }
             {
+                
                 isAuth() && (
-                    <li className="nav-item">
-                        <a onClick={logout} className="nav-link text-light">Logout</a>
-                    </li>
+                    <React.Fragment>
+                        <Link href="/user">
+                            <a className="nav-link ml-auto">User</a>
+                        </Link>
+                        <li className="nav-item">
+                            <a onClick={logout} className="nav-link text-light">Logout</a>
+                        </li>
+                    </React.Fragment>
                 )
             }
             
