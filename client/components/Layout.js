@@ -4,6 +4,7 @@ import NProgress from 'nprogress';
 import React from 'react';
 import Router from 'next/router';
 import 'nprogress/nprogress.css'
+import {isAuth , logout} from '../helpers/auth'
 
 Router.onRouteChangeStart = url => NProgress.start()
 Router.onRouteChangeComplete = url => NProgress.done()
@@ -36,6 +37,18 @@ const Layout = ({children}) =>{
                 <Link href="/register">
                         <a className="nav-link text-light">RegisterPage</a>
                 </Link>
+            </li>
+            {
+                isAuth() && isAuth().role == 'admin' && (
+                    <li className="nav-item ml-auto">
+                        <Link href="/admin">
+                            <a className="nav-link text-light">Admin</a>
+                        </Link>
+                    </li>
+                )
+            }
+            <li className="nav-item">
+                    <a onClick={logout} className="nav-link text-light">Logout</a>
             </li>
         </ul>
     )

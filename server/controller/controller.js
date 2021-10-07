@@ -69,7 +69,6 @@ exports.login = (req, res) => {
             return res.status(404).send({error:"Email and Password Does not Match"});
         }
         const token = jwt.sign({_id:user._id},process.env.JWT_SECRET,{expiresIn:'7d'});
-
         const {_id,name,email,role} = user;
 
         return res.json({

@@ -9,8 +9,8 @@ import { authenticate,isAuth } from "../helpers/auth";
 
 const Login = () => {
     const [state,setState] = useState({
-        email: "jatinmahajan712@gmail.com",
-        password: "1234567",
+        email: "jatinmahajan711@gmail.com",
+        password: "12345678",
         error: "",
         success: "",
         buttonText: "Login",
@@ -33,7 +33,7 @@ const Login = () => {
 
         try {
             const response = await axios.post(`${API}/login`,{email,password});
-            authenticate(response,() => isAuth() && isAuth().role == 'admin'? Router.push('/admin') :Router.push('/user')); 
+            authenticate(response,() => isAuth() && isAuth().role === 'admin' ? Router.push('/admin'):Router.push('/user')); 
             
         } catch (error) {
             setState({...state,buttonText:'Register',error:error.response.data.error});
