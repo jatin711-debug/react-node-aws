@@ -1,4 +1,5 @@
 const authRouters = require('./routes/auth');
+const userRouters = require('./routes/user');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const express  = require('express');
@@ -14,6 +15,8 @@ app.use(cors({
 }));
 
 app.use('/api',authRouters);
+app.use('/api',userRouters);
+
 
 const port = 8000;
 app.listen(port,()=>{

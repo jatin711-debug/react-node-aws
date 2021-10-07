@@ -43,7 +43,6 @@ export const isAuth = () =>{
     if(process.browser){
         const cookieChecked = getCookie("token");
         if(cookieChecked){
-            console.log("Cookie Check");
             if(localStorage.getItem("user")){
                 return JSON.parse(localStorage.getItem("user"));
             }else{

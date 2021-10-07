@@ -3,6 +3,7 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const shortId = require('shortId');
 const expressJwt = require('express-jwt');
+require('dotenv').config()
 const AWS = require('aws-sdk');
 
 AWS.config.update({
@@ -83,13 +84,14 @@ exports.login = (req, res) => {
 };
 
 
-exports.reuireSignin = expressJwt({secret:process.env.JWT_SECRET});
+exports.requireSignin = expressJwt({secret : process.env.JWT_SECRET,algorithms:['HS256']})
 
 exports.authMiddleware = (req, res, next) => {
+    console.log("Inside authMiddleware")
     const authUserId = req.user._id;
     User.findOne({_id: authUserId}).exec((err, user) => {
         if(err || !user) {
-            return res.status(404).json({
+            return res.status(400).json({
                 error:"User Not Found"
             });
         }
@@ -99,16 +101,19 @@ exports.authMiddleware = (req, res, next) => {
 };
 
 exports.adminMiddleware = (req, res, next) => {
+    console.log("Inside adminMiddleware")
     const adminUserId = req.user._id;
     User.findOne({_id: adminUserId}).exec((err, user) => {
         if(err || !user) {
-            return res.status(404).json({
+            return res.status(400).json({
                 error:"User Not Found"
             });
         }
 
         if(user.role !== 'admin') {
-            
+            return res.status(400).json({
+                error:"Admin Resource . Access Denied"
+            });
         }
 
         req.profile = user;
