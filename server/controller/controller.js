@@ -2,14 +2,13 @@ const {registerEmailParams} = require('../helpers/email');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const shortId = require('shortId');
-
+const expressJwt = require('express-jwt');
 const AWS = require('aws-sdk');
 
 AWS.config.update({
     region:'us-west-2',
     accessKeyId:process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey:process.env.AWS_SECRET_ACCESS_KEY
-    
 });
 
 const ses = new AWS.SES({apiVersion:'2010-12-01'});
@@ -60,15 +59,19 @@ exports.registerActivate = (req, res) => {
 
 
 exports.login = (req, res) => {
+
     const {email,password} = req.body;
     User.findOne({email}).exec(function (err, user) {
         if(err || !user){
             return res.status(404).send({error:"User With This Email Does Not Exist ...Please Register First!!!"});
         }
+
         if(!user.authenticate(password)){
             return res.status(404).send({error:"Email and Password Does not Match"});
         }
+
         const token = jwt.sign({_id:user._id},process.env.JWT_SECRET,{expiresIn:'7d'});
+
         const {_id,name,email,role} = user;
 
         return res.json({
@@ -76,5 +79,39 @@ exports.login = (req, res) => {
                 _id,name,email,role
             }
         })
+    });
+};
+
+
+exports.reuireSignin = expressJwt({secret:process.env.JWT_SECRET});
+
+exports.authMiddleware = (req, res, next) => {
+    const authUserId = req.user._id;
+    User.findOne({_id: authUserId}).exec((err, user) => {
+        if(err || !user) {
+            return res.status(404).json({
+                error:"User Not Found"
+            });
+        }
+        req.profile = user;
+        next();
+    });
+};
+
+exports.adminMiddleware = (req, res, next) => {
+    const adminUserId = req.user._id;
+    User.findOne({_id: adminUserId}).exec((err, user) => {
+        if(err || !user) {
+            return res.status(404).json({
+                error:"User Not Found"
+            });
+        }
+
+        if(user.role !== 'admin') {
+            
+        }
+
+        req.profile = user;
+        next();
     });
 };
