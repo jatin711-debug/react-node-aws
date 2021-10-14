@@ -60,7 +60,7 @@ exports.registerActivate = (req, res) => {
 
 
 exports.login = (req, res) => {
-
+    
     const {email,password} = req.body;
     User.findOne({email}).exec(function (err, user) {
         if(err || !user){
@@ -115,7 +115,6 @@ exports.adminMiddleware = (req, res, next) => {
                 error:"Admin Resource . Access Denied"
             });
         }
-
         req.profile = user;
         next();
     });

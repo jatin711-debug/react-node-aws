@@ -21,54 +21,54 @@ const Layout = ({children}) =>{
             <link rel="stylesheet" href="/static/css/style.css" />
         </React.Fragment>
     )
-    const nav = ()=>(
+    const nav = () => (
         <ul className="nav nav-tabs bg-dark">
             <li className="nav-item">
                 <Link href="/">
-                        <a className="nav-link text-light">Home</a>
+                    <a className="nav-link text-light">Home</a>
                 </Link>
             </li>
-            {
-                !isAuth() && (
-                    <React.Fragment>
-                        <li className="nav-item">
-                            <Link href="/login ">
-                                    <a className="nav-link text-light">LoginPage</a>
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link href="/user">
-                                    <a className="nav-link text-light">RegisterPage</a>
-                            </Link>
-                        </li>
-                    </React.Fragment>
-                )
-            }
-            {
-                isAuth() && isAuth().role == 'admin' && (
-                    <li className="nav-item ml-auto">
-                        <Link href="/admin">
-                            <a className="nav-link text-light">Admin</a>
+
+            {!isAuth() && (
+                <React.Fragment>
+                    <li className="nav-item">
+                        <Link href="/login">
+                            <a className="nav-link text-light">Login</a>
                         </Link>
                     </li>
-                )
-            }
-            {
-                
-                isAuth() && (
-                    <React.Fragment>
-                        <Link href="/user">
-                            <a className="nav-link ml-auto">User</a>
+                    <li className="nav-item">
+                        <Link href="/register">
+                            <a className="nav-link text-light">Register</a>
                         </Link>
-                        <li className="nav-item">
-                            <a onClick={logout} className="nav-link text-light">Logout</a>
-                        </li>
-                    </React.Fragment>
-                )
-            }
-            
+                    </li>
+                </React.Fragment>
+            )}
+
+            {isAuth() && isAuth().role === 'admin' && (
+                <li className="nav-item ml-auto">
+                    <Link href="/admin">
+                        <a className="nav-link text-light">{isAuth().name}</a>
+                    </Link>
+                </li>
+            )}
+
+            {isAuth() && isAuth().role === 'subscriber' && (
+                <li className="nav-item ml-auto">
+                    <Link href="/user">
+                        <a className="nav-link text-light">{isAuth().name}</a>
+                    </Link>
+                </li>
+            )}
+
+            {isAuth() && (
+                <li className="nav-item">
+                    <a onClick={logout} className="nav-link text-light">
+                        Logout
+                    </a>
+                </li>
+            )}
         </ul>
-    )
+    );
     return <React.Fragment>{head()} {nav()} <div className="container pt-5 pb-5"> { children }</div></React.Fragment>;
 }
 export default Layout;
