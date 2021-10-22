@@ -11,7 +11,6 @@ exports.userRegisterValidation = [
     check('password')
         .isLength({min:8})   
                 .withMessage('Password Must Be 8 Character Long')
-
 ]
 
 exports.userLoginValidation = [
@@ -22,4 +21,20 @@ exports.userLoginValidation = [
         .isLength({min:6})   
                 .withMessage('Password Must Be 6 Character Long')
 
+]
+
+exports.forgotPasswordValidator = [
+    check('email')
+            .isEmail()      
+                .withMessage('Must be a valid email address')
+]
+
+exports.resetPasswordValidator = [
+    check('password')
+        .isLength({min:6})   
+                .withMessage('Password Must Be 8 Character Long'),
+    check('resetPasswordLink')
+        .not()
+            .isEmpty()      
+                .withMessage('Token Is Required')
 ]

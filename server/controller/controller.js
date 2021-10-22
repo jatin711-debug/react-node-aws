@@ -1,7 +1,8 @@
-const {registerEmailParams} = require('../helpers/email');
+const {registerEmailParams,forgotPasswordEmailParams} = require('../helpers/email');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const shortId = require('shortId');
+const _ = require('lodash');
 
 require('dotenv').config()
 const AWS = require('aws-sdk');
@@ -116,3 +117,55 @@ exports.adminMiddleware = (req, res, next) => {
         next();
     });
 }; 
+
+exports.forgotPassword = (req, res) => {
+    const {email} = req.body;
+    User.findOne({email}).exec(function (err, user) {  
+        if(err || !user) {
+            return res.status(404).json({error:"User Not Found"});
+        }
+        const token = jwt.sign({name:user.name},process.env.JWT_RESET_PASSWORD,{expiresIn:'10m'});
+        const params = forgotPasswordEmailParams(email,token);
+        return user.updateOne({resetPasswordLink:token},function(err,success){
+            if(err){
+                return res.status(400).json({error:"Error Occured While Updating User"});
+            }
+            const sendEmail = ses.sendEmail(params).promise();
+            sendEmail.then(data =>{
+                return res.status(200).json({message:"Email Has Been Sent To Your Email"});
+            }).catch(err =>{
+                return res.status(500).json({error:"We coudnt verify your email address"})
+            })
+        });
+    });
+}
+
+exports.resetPassword = (req, res) => {
+        const {resetPasswordLink,newPassword} = req.body;
+    if(resetPasswordLink){
+        jwt.verify(resetPasswordLink,process.env.JWT_RESET_PASSWORD, (err, result) => {
+            if(err) {
+                return res.status(401).json({
+                error:"Expired Link Try Again"
+                    });
+                }
+        User.findOne({resetPasswordLink}).exec((err, user) => {
+            if(err || !user){
+                return res.status(404).json({error:"User Not Found"});
+            }
+            const updatedFields = {
+                password:newPassword,
+                resetPasswordLink:''
+            }
+
+            user = _.extend(user,updatedFields);
+            user.save(function(err, result){
+                if(err){
+                    return res.status(400).json({error:"Error Updating Password"});
+                }
+                return res.status(200).json({message:"Password Updated Successfully"});
+            });
+        });
+    });
+    }
+}
