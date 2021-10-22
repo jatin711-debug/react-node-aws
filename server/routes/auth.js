@@ -9,10 +9,5 @@ const {register , registerActivate, login, requireSignin} = require('../controll
 router.post('/register', userRegisterValidation, runValidation ,register );
 router.post('/register/activate', registerActivate);
 router.post('/login', userLoginValidation, runValidation ,login );
-// router.get('/secret',requireSignin,(req, res) => {
-//     res.json({ 
-//         data: "This is secret Data"
-//     });
-// })
 
 module.exports = router;

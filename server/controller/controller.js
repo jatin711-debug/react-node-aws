@@ -2,7 +2,7 @@ const {registerEmailParams} = require('../helpers/email');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const shortId = require('shortId');
-const expressJwt = require('express-jwt');
+
 require('dotenv').config()
 const AWS = require('aws-sdk');
 
@@ -58,9 +58,7 @@ exports.registerActivate = (req, res) => {
 }
 
 
-
 exports.login = (req, res) => {
-    
     const {email,password} = req.body;
     User.findOne({email}).exec(function (err, user) {
         if(err || !user){
@@ -84,8 +82,6 @@ exports.login = (req, res) => {
 };
 
 
-exports.requireSignin = expressJwt({secret : process.env.JWT_SECRET,algorithms:['HS256']})
-
 exports.authMiddleware = (req, res, next) => {
     console.log("Inside authMiddleware")
     const authUserId = req.user._id;
@@ -101,10 +97,11 @@ exports.authMiddleware = (req, res, next) => {
 };
 
 exports.adminMiddleware = (req, res, next) => {
-    console.log("Inside adminMiddleware")
+    console.log("Inside adminMiddleware");
     const adminUserId = req.user._id;
     User.findOne({_id: adminUserId}).exec((err, user) => {
         if(err || !user) {
+            console.log("Inside adminMiddleware finding admin user");
             return res.status(400).json({
                 error:"User Not Found"
             });
@@ -118,4 +115,4 @@ exports.adminMiddleware = (req, res, next) => {
         req.profile = user;
         next();
     });
-};
+}; 

@@ -4,7 +4,7 @@ import {API} from '../config';
 
 import {getCookie} from '../helpers/auth';
 
-const withUser = Page => {
+const withUser = (Page) => {
     const WithAuthUser = props => <Page {...props} />;
     WithAuthUser.getInitialProps = async (context) => {
         const token = getCookie('token',context.req);
@@ -25,7 +25,7 @@ const withUser = Page => {
             }
         }
 
-        if(user == null) {
+        if(user === null) {
             context.res.writeHead(302, {
                 Location: '/'
             })

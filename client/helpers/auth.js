@@ -13,12 +13,28 @@ export const removeCookie = (key, value) =>{
     }  
 };
 
-export const getCookie = (key) =>{
-    if(process.browser){
-        return cookie.get(key);
-    }  
+export const getCookie = (key,req) =>{
+    return process.browser ? getCookieFromBrowser(key) : getCookieFromServer(key,req);
 };
 
+
+export const getCookieFromServer  = (key,req) =>{
+    if( !req.headers.cookie){
+        return undefined;
+    }
+    let token = req.headers.cookie.split(';').find(c => c.trim().startsWith(`${key}=`));
+    if(!token){
+        return undefined;
+    }
+    let tokenValue = token.split('=')[1];
+    console.log('ServerToken',tokenValue);
+    return tokenValue;
+}
+
+
+export const getCookieFromBrowser = (key) =>{
+    return cookie.get(key);
+}
 
 export const setLocalStorage = (key, value) =>{
     if(process.browser){
@@ -32,7 +48,6 @@ export const removeLocalStorage = (key) =>{
     } 
 };
 
-
 export const authenticate = (response,next) =>{
     setCookie("token",response.data.token);
     setLocalStorage("user",response.data.user);
@@ -44,8 +59,10 @@ export const isAuth = () =>{
         const cookieChecked = getCookie("token");
         if(cookieChecked){
             if(localStorage.getItem("user")){
+                console.log("Inside ls")
                 return JSON.parse(localStorage.getItem("user"));
             }else{
+                console.log("inside err")
                 return false;
             }
         }
@@ -56,6 +73,5 @@ export const isAuth = () =>{
 export const logout = () =>{
     removeCookie('token');
     removeLocalStorage('user');
-
     Router.push('/login');
 };

@@ -29,17 +29,17 @@ const Login = () => {
     const handelSubmit = async e =>{
 
         e.preventDefault();
-        setState({...state,buttonText:'...Logging In ...'});
+        setState({...state,buttonText:'...Logging In...'});
 
         try {
             const response = await axios.post(`${API}/login`,{email,password});
-            authenticate(response,() => isAuth() && isAuth().role === 'admin' ? Router.push('/admin'):Router.push('/user')); 
+            authenticate( response, () => isAuth() && isAuth().role === 'admin' ? Router.push('/admin')  : Router.push('/user')); 
             
         } catch (error) {
             setState({...state,buttonText:'Register',error:error.response.data.error});
         }
     }
-
+    
     const loginForm = ()=> (
         <form onSubmit={handelSubmit}>
             <div className="form-group">
