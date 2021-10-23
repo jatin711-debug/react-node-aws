@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     hashedPassword: {type: String,trim:true,require:true},
     salt:String,
     role:{type: String,default:'Subscriber'},
-    reserPassworkLink:{
+    resetPasswordLink:{
         data:String,default:''
     }
 },{timestamps:true})
@@ -20,7 +20,7 @@ userSchema.virtual('password')
         this.hashedPassword = this.encryptPassword(password);
     })
     .get(function () { 
-        return this.password;
+        return this._password;
     })
 
 userSchema.methods = {

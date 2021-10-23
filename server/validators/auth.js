@@ -9,7 +9,7 @@ exports.userRegisterValidation = [
             .isEmail()      
                 .withMessage('Must be a valid email address'),
     check('password')
-        .isLength({min:8})   
+        .isLength({min:6})   
                 .withMessage('Password Must Be 8 Character Long')
 ]
 
@@ -30,9 +30,9 @@ exports.forgotPasswordValidator = [
 ]
 
 exports.resetPasswordValidator = [
-    check('password')
+    check('newPassword')
         .isLength({min:6})   
-                .withMessage('Password Must Be 8 Character Long'),
+                .withMessage('Password Must Be 6 Character Long'),
     check('resetPasswordLink')
         .not()
             .isEmpty()      
