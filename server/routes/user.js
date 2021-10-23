@@ -3,10 +3,10 @@ const expressJwt = require('express-jwt');
 const router = express.Router();
 const { authMiddleware,adminMiddleware } = require('../controller/controller');
 const { read } = require('../controller/user');
+const {requireSignin} = require('../controller/controller')
 
 
-
-router.get('/user', expressJwt({secret : process.env.JWT_SECRET,algorithms:['HS256']}),authMiddleware, read);
-router.get('/admin', expressJwt({secret : process.env.JWT_SECRET,algorithms:['HS256']}) ,adminMiddleware, read);
+router.get('/user',requireSignin,authMiddleware, read);
+router.get('/admin', requireSignin,adminMiddleware, read);
 
 module.exports = router;

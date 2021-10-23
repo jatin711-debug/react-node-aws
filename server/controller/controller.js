@@ -1,5 +1,6 @@
 const {registerEmailParams,forgotPasswordEmailParams} = require('../helpers/email');
 const User = require('../models/user');
+const expressJwt = require('express-jwt');
 const jwt = require('jsonwebtoken');
 const shortId = require('shortId');
 const _ = require('lodash');
@@ -83,6 +84,7 @@ exports.login = (req, res) => {
     });
 };
 
+exports.requireSignin = expressJwt({secret : process.env.JWT_SECRET,algorithms:['HS256']});
 
 exports.authMiddleware = (req, res, next) => {
     console.log("Inside authMiddleware")
