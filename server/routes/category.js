@@ -26,7 +26,7 @@ const {runValidation} = require('../validators/index');
 router.post('/category',categoryCreateValidator,runValidation,requireSignin,adminMiddleware,create);
 router.get('/categories',list);
 router.get('/category/:slug',read);
-router.put('/category/:slug',categoryUpdateValidator,runValidation,requireSignin,adminMiddleware,create);
+router.put('/category/:slug',categoryUpdateValidator,runValidation,requireSignin,adminMiddleware,update);
 router.delete('/category/:slug',requireSignin,adminMiddleware,remove);
 
 module.exports = router;
