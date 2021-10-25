@@ -27,7 +27,6 @@ export const getCookieFromServer  = (key,req) =>{
         return undefined;
     }
     let tokenValue = token.split('=')[1];
-    console.log('ServerToken',tokenValue);
     return tokenValue;
 }
 
@@ -59,10 +58,8 @@ export const isAuth = () =>{
         const cookieChecked = getCookie("token");
         if(cookieChecked){
             if(localStorage.getItem("user")){
-                console.log("Inside ls")
                 return JSON.parse(localStorage.getItem("user"));
             }else{
-                console.log("inside err")
                 return false;
             }
         }

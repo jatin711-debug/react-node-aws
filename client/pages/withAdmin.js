@@ -33,8 +33,7 @@ const withAdmin = Page => {
         } else {
             return {
                 ...(Page.getInitialProps ? await Page.getInitialProps(context) : {}),
-                user,
-                token
+                user,token
             };
         }
     };
