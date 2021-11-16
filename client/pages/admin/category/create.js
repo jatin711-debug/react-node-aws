@@ -3,7 +3,7 @@ import Layout from "../../../components/Layout";
 import withAdmin from "../../withAdmin";
 import {showSuccessMessage , showErrorMessage} from "../../../helpers/alert";
 import axios from "axios";
-
+import Resizer from 'react-image-file-resizer'; 
 import {API} from "../../../config";
 
 const Create = ({user,token})=>{
@@ -12,23 +12,46 @@ const Create = ({user,token})=>{
         content:'',
         error:'',
         success:'',
-        formData: process.browser && new FormData(),
         buttonText:'Create',
         imageUploadText:'Upload',
+        image:''
     });
 
-    const {name , content , error , success , formData , buttonText , imageUploadText} = state;
+    const [imageUploadButton , setImageUploadButton] = useState('Upload Image'); 
+
+    const {name , content , error , success , image , buttonText } = state;
+
     const handelChange = (name) => (e) =>{
-        const value = name === 'image' ? e.target.files[0] : e.target.value;
-        const imageName = name === 'image' ? e.target.files[0].name : 'Upload Image';
-        formData.set(name, value);
-        setState({...state,[name]:value,error:'',success:'',imageUploadText:imageName});
+        setState({...state,[name]:e.target.value,error:'',success:''});
     }
+
+    const handelImage = (event) =>{
+        let fileInput = false;
+        if(event.target.files[0]){
+            fileInput = true;
+        }
+        setImageUploadButton(event.target.files[0].name);
+        if(fileInput){
+            Resizer.imageFileResizer(
+                event.target.files[0],
+                300,
+                300,
+                'PNG',
+                100,
+                0,
+                uri => {
+                    setState({...state,image:uri});
+                },
+                'base64'
+                )
+        }
+    }
+
     const handelSubmit = async (e) =>{
         e.preventDefault();
         setState({...state,buttonText:'Creating...'});
         try{
-            const res = await axios.post(`${API}/category`,formData,{
+            const res = await axios.post(`${API}/category`,{name,content,image},{
                 headers:{
                     authorization:`Bearer ${token}`
                 }
@@ -41,8 +64,6 @@ const Create = ({user,token})=>{
                 error:'',
                 success:'SuccessFully Upload in New category',
                 buttonText:'Done',
-                imageUploadText:'Upload',
-                formData: process.browser && new FormData(),
             });
         }catch(e) {
             console.log(e);
@@ -62,8 +83,8 @@ const Create = ({user,token})=>{
         </div>
         <div className="form-group">
             <label className="btn btn-outline-secondary">
-                {imageUploadText}
-                <input required  accept="image/*" type="file" className="form-control" onChange={handelChange('image')} hidden/>
+                {imageUploadButton}
+                <input required  accept="image/*" type="file" className="form-control" onChange={handelImage} hidden/>
             </label>
         </div>
 

@@ -4,12 +4,11 @@ const expressJwt = require('express-jwt');
 const jwt = require('jsonwebtoken');
 const shortId = require('shortId');
 const _ = require('lodash');
-
 require('dotenv').config()
 const AWS = require('aws-sdk');
 
 AWS.config.update({
-    region:'us-west-2',
+    region:'us-east-2',
     accessKeyId:process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey:process.env.AWS_SECRET_ACCESS_KEY
 });
