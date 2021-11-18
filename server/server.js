@@ -1,6 +1,7 @@
 const categoryRoutes = require('./routes/category');
 const authRouters = require('./routes/auth');
 const userRouters = require('./routes/user');
+const linkRouters = require('./routes/link');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const express  = require('express');
@@ -18,6 +19,8 @@ app.use(cors({
 app.use('/api',authRouters);
 app.use('/api',userRouters);
 app.use('/api',categoryRoutes);
+app.use('/api',linkRouters);
+
 
 const port = 8000;
 app.listen(port,()=>{

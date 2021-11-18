@@ -7,7 +7,7 @@ const HomePage= ({categories}) => {
 
     const listCategories = ()=> categories.map((category, index) => (
         <Link href="/">
-            <a style={{border: '1px solid grey'}} className="bg-light p-3 col-md-4">
+            <a key={index} style={{border: '1px solid grey'}} className="bg-light p-3 col-md-4">
                 <div>
                     <div className="row">
                         <div className="col-md-4"> 
