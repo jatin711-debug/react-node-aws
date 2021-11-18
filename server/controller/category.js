@@ -34,6 +34,8 @@ exports.create = (req, res) => {
                 }
                 category.image.url = data.Location;
                 category.image.key = data.Key;
+                category.postedBy = req.user._id;
+                
                 category.save((err,data) => {
                     if(err) {
                         console.log(err);
