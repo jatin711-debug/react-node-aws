@@ -6,7 +6,7 @@ import Link from "next/link";
 const HomePage= ({categories}) => {
 
     const listCategories = ()=> categories.map((category, index) => (
-        <Link href="/">
+        <Link href="/" key={index}>
             <a key={index} style={{border: '1px solid grey'}} className="bg-light p-3 col-md-4">
                 <div>
                     <div className="row">
